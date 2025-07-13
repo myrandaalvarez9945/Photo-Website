@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact | Captured by Daniel</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+  <div class="logo">Captured by Daniel</div>
+
+  <div class="nav-toggle" id="navToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="cart.html" id="cart-link">Cart (0)</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+    <script>
+  const navToggle = document.getElementById("navToggle");
+  const navLinks = document.getElementById("navLinks");
+
+  navToggle.addEventListener("click", () => {
+    navLinks.classList.toggle("show");
+  });
+</script>
+  </header>
+
+  <main class="contact-section">
+    <h2 class="contact-title">Let's Connect</h2>
+    <p class="contact-intro">Have questions about a photo, a custom print, or just want to send kind words? Reach out below.</p>
+
+    <form id="contact-form" class="contact-form">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+
+    <div id="thankyou-message" class="thank-you-message" style="display: none;">
+      <p>✨ Thank you for reaching out! Your message has been sent. We'll get back to you soon. ✨</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Made with love by Gabi • A gift for Daniel and the world 🌿</p>
+  </footer>
+
+  <script src="js/cart.js"></script> <!-- ✅ this handles the cart count -->
+
+<script>
+  // ✅ This is your existing contact form code (keep it)
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contact-form");
+    const thankYou = document.getElementById("thankyou-message");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch("https://formspree.io/f/xeokalna", {
+          method: "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json"
+          }
+        });
+
+        if (response.ok) {
+          form.reset();
+          thankYou.style.display = "block";
+          thankYou.scrollIntoView({ behavior: "smooth" });
+        } else {
+          alert("Oops! There was a problem submitting your form.");
+        }
+      } catch (error) {
+        console.error("Form submission error:", error);
+        alert("Something went wrong. Please try again later.");
+      }
+    });
+  });
+</script>
+
+
+</body>
+</html>

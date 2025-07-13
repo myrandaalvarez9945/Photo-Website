@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Cart | Captured by Daniel</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .cart-container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      background-color: #f9f9f9;
+      padding: 2rem;
+      border-radius: 12px;
+      color: #000;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .cart-total {
+      text-align: right;
+      margin-top: 1rem;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .next-button {
+      display: block;
+      margin: 2rem auto 0;
+      background-color: #007bff;
+      color: white;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .next-button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 768px) {
+      table {
+        font-size: 0.9rem;
+      }
+
+      th, td {
+        padding: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">Captured by Daniel</div>
+      <div class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="cart.html" id="cart-link">Cart (0)</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="cart-container">
+      <h2 style="text-align:center;">Your Cart 🛒</h2>
+      <table id="cartTable">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <div class="cart-total">Cart Total: $<span id="cartTotal">0.00</span></div>
+      <button class="next-button" onclick="goToShipping()">Next</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Made with love by Gabi • A gift for Daniel and the world 🌿</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById("navToggle").addEventListener("click", function () {
+      document.getElementById("navLinks").classList.toggle("show");
+    });
+
+    const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const cartTable = document.querySelector("#cartTable tbody");
+    const cartTotalElement = document.getElementById("cartTotal");
+    let total = 0;
+
+    cartTable.innerHTML = "";
+
+    cartItems.forEach((item, index) => {
+      const quantity = parseInt(item.quantity) || 1;
+      const price = parseFloat(item.unitPrice) || 0;
+      const subtotal = quantity * price;
+      total += subtotal;
+
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><img src="${item.image}" width="60" style="border-radius:8px;"/></td>
+        <td>${item.title}</td>
+        <td>${item.type}</td>
+        <td><input type="number" min="1" value="${quantity}" data-index="${index}" class="qty-input"/></td>
+        <td>$${price.toFixed(2)}</td>
+        <td>$${subtotal.toFixed(2)}</td>
+        <td><button onclick="removeItem(${index})" style="color:red;">🗑️</button></td>
+      `;
+      cartTable.appendChild(row);
+    });
+
+    cartTotalElement.textContent = total.toFixed(2);
+
+    document.querySelectorAll('.qty-input').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const index = parseInt(e.target.dataset.index);
+        const newQty = parseInt(e.target.value);
+        if (newQty > 0) {
+          cartItems[index].quantity = newQty;
+          localStorage.setItem("cartItems", JSON.stringify(cartItems));
+          location.reload(); // Refresh to update subtotal
+        }
+      });
+    });
+
+    function removeItem(index) {
+      cartItems.splice(index, 1);
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      location.reload();
+    }
+
+    function goToShipping() {
+      if (cartItems.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+      window.location.href = "shipping.html";
+    }
+
+    // Update cart link count
+    const cartLink = document.getElementById("cart-link");
+    const count = cartItems.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
+    cartLink.textContent = `Cart (${count})`;
+  </script>
+</body>
+</html>

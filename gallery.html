@@ -1,0 +1,86 @@
+<!-- ✅ gallery.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallery | Captured by Daniel</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+  <div class="logo">Captured by Daniel</div>
+
+  <div class="nav-toggle" id="navToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="cart.html" id="cart-link">Cart (0)</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggle = document.getElementById("navToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        toggle.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      });
+    </script>
+  </header>
+
+  <main class="gallery-section">
+    <h2 class="gallery-title">Gallery</h2>
+    <div class="gallery-grid">
+      <a href="details.html?photo=bear_and_cubs" class="gallery-item">
+        <img src="assets/images/Bear_and_Cubs.jpg" alt="Bear and Cubs" class="gallery-image">
+      </a>
+      <a href="details.html?photo=bear" class="gallery-item">
+        <img src="assets/images/bear.jpg" alt="Bear" class="gallery-image">
+      </a>
+      <a href="details.html?photo=bison" class="gallery-item">
+        <img src="assets/images/bison.jpg" alt="Bison" class="gallery-image">
+      </a>
+      <a href="details.html?photo=cat" class="gallery-item">
+        <img src="assets/images/cat.jpg" alt="Cat" class="gallery-image">
+      </a>
+      <a href="details.html?photo=eagle" class="gallery-item">
+        <img src="assets/images/eagle.jpg" alt="Eagle" class="gallery-image">
+      </a>
+      <a href="details.html?photo=snowyfox" class="gallery-item">
+        <img src="assets/images/snowy_fox.jpg" alt="Fox in Snow" class="gallery-image">
+      </a>
+      <a href="details.html?photo=fox" class="gallery-item">
+        <img src="assets/images/fox.jpg" alt="Fox" class="gallery-image">
+      </a>
+      <a href="details.html?photo=landscape" class="gallery-item">
+        <img src="assets/images/landscape.jpg" alt="Landscape" class="gallery-image">
+      </a>
+      <a href="details.html?photo=baby_bear" class="gallery-item">
+        <img src="assets/images/baby_bear.jpg" alt="Baby Bear" class="gallery-image">
+      </a>
+      <a href="details.html?photo=owl" class="gallery-item">
+        <img src="assets/images/owl.jpg" alt="Owl" class="gallery-image">
+      </a>
+      <a href="details.html?photo=snowy_ram" class="gallery-item">
+        <img src="assets/images/snowy_ram.jpg" alt="Ram in Snow" class="gallery-image">
+      </a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Made with love by Gabi • A gift for Daniel and the world 🌿</p>
+  </footer>
+
+  <script src="js/cart.js"></script>
+</body>
+</html>

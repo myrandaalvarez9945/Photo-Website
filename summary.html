@@ -1,0 +1,248 @@
+<!-- ✨ Captured by Daniel – Final summary.html (Clean PDF + EmailJS Fixed + Cart Reset) ✨ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Summary | Captured by Daniel</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body {
+      background-color: #111;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+
+    .summary-container {
+      max-width: 800px;
+      margin: 3rem auto;
+      background-color: #f9f9f9;
+      padding: 2rem;
+      border-radius: 12px;
+      color: #000;
+    }
+
+    h1, h3 {
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      border-bottom: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .total-line {
+      text-align: right;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    .return-home, .download-btn {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .return-home a, .download-btn button {
+      background-color: #28a745;
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .return-home a:hover, .download-btn button:hover {
+      background-color: #1f7d39;
+    }
+  </style>
+</head>
+<body>
+  <div class="summary-container">
+    <h1>Order Summary</h1>
+    <div id="summaryContent">
+      <div class="section" id="shippingInfo"></div>
+
+      <div class="section">
+        <h3>🖼️ Cart Items</h3>
+        <table id="cartTable">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="total-line">Total + $5 Shipping: $<span id="grandTotal">0.00</span></div>
+      </div>
+    </div>
+
+    <div class="download-btn">
+      <button onclick="downloadPDF()">📄 Download PDF Receipt</button>
+    </div>
+    <div class="return-home">
+      <a href="index.html" id="returnHome">Return to Home</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAYX4wDxj3o3K_OvGCnwd4-LLXzkaCYqi8",
+      authDomain: "captured-by-daniel.firebaseapp.com",
+      projectId: "captured-by-daniel",
+      storageBucket: "captured-by-daniel.appspot.com",
+      messagingSenderId: "50758933728",
+      appId: "1:50758933728:web:e8147337e173beadddc485",
+      measurementId: "G-RS58ZTWVKJ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    emailjs.init("lfrrU44MZRM20xrdq");
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const shipping = JSON.parse(localStorage.getItem("shippingInfo")) || {};
+      const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+      const itemTotal = cartItems.reduce((sum, item) => sum + ((parseFloat(item.unitPrice) || 0) * (parseInt(item.quantity) || 1)), 0);
+      const grandTotal = itemTotal + 5;
+
+      const order = {
+        createdAt: serverTimestamp(),
+        shipping,
+        items: cartItems,
+        total: grandTotal
+      };
+
+      try {
+        await addDoc(collection(db, "orders"), order);
+        console.log("✅ Order saved to Firestore");
+        await sendOrderEmail(order);
+      } catch (err) {
+        console.error("❌ Firestore error:", err);
+      }
+
+      document.getElementById("shippingInfo").innerHTML = `
+        <h3>📦 Shipping Info</h3>
+        <p><strong>Name:</strong> ${shipping.firstName} ${shipping.lastName}</p>
+        <p><strong>Phone:</strong> ${shipping.phone}</p>
+        <p><strong>Email:</strong> ${shipping.email}</p>
+        <p><strong>Address:</strong> ${shipping.address}</p>
+        <p><strong>CashApp:</strong> $${shipping.cashApp}</p>
+      `;
+
+      const tbody = document.querySelector("#cartTable tbody");
+      tbody.innerHTML = "";
+      cartItems.forEach(item => {
+        const title = item.title || "Untitled";
+        const type = item.type || "Standard";
+        const quantity = parseInt(item.quantity) || 1;
+        const price = parseFloat(item.unitPrice) || 0;
+        const subtotal = price * quantity;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><img src="${item.image}" width="50"/></td>
+          <td>${title}</td>
+          <td>${type}</td>
+          <td>${quantity}</td>
+          <td>$${price.toFixed(2)}</td>
+          <td>$${subtotal.toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      document.getElementById("grandTotal").textContent = grandTotal.toFixed(2);
+
+      document.getElementById("returnHome").addEventListener("click", () => {
+        localStorage.removeItem("cartItems");
+        const cartLink = document.getElementById("cart-link");
+        if (cartLink) cartLink.textContent = "Cart (0)";
+      });
+    });
+
+    async function sendOrderEmail(order) {
+      const itemsList = order.items.map(i => {
+        const title = i.title || "Untitled";
+        const type = i.type || "Print";
+        const quantity = parseInt(i.quantity) || 1;
+        return `${title} (${type}) × ${quantity}`;
+      }).join('\n');
+
+      try {
+        await emailjs.send("service_cjcy58t", "template_dxpoxpb", {
+          name: `${order.shipping.firstName} ${order.shipping.lastName}`,
+          email: order.shipping.email,
+          phone: order.shipping.phone,
+          address: order.shipping.address,
+          cashApp: order.shipping.cashApp,
+          cartItems: itemsList,
+          total: order.total.toFixed(2)
+        });
+        console.log("📨 Email sent to Gabi!");
+      } catch (err) {
+        console.error("❌ EmailJS error:", err);
+      }
+    }
+
+    window.downloadPDF = () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const shipping = JSON.parse(localStorage.getItem("shippingInfo")) || {};
+      const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+      const itemTotal = cartItems.reduce((sum, item) => sum + ((parseFloat(item.unitPrice) || 0) * (parseInt(item.quantity) || 1)), 0);
+      const total = itemTotal + 5;
+
+      doc.setFontSize(14);
+      doc.text("Captured by Daniel — Order Receipt", 10, 10);
+
+      let y = 20;
+      doc.setFontSize(11);
+      doc.text(`Name: ${shipping.firstName} ${shipping.lastName}`, 10, y);
+      doc.text(`Email: ${shipping.email}`, 10, y += 8);
+      doc.text(`Phone: ${shipping.phone}`, 10, y += 8);
+      doc.text(`Address: ${shipping.address}`, 10, y += 8);
+      doc.text(`CashApp: $${shipping.cashApp}`, 10, y += 8);
+      y += 10;
+
+      doc.setFontSize(12);
+      doc.text("Ordered Items:", 10, y);
+      y += 8;
+
+      cartItems.forEach(item => {
+        const title = item.title || "Untitled";
+        const type = item.type || "Print";
+        const quantity = parseInt(item.quantity) || 1;
+        const price = parseFloat(item.unitPrice) || 0;
+        const line = `${title} — ${type} × ${quantity} = $${(price * quantity).toFixed(2)}`;
+        doc.text(line, 10, y);
+        y += 7;
+      });
+
+      y += 5;
+      doc.text(`Shipping: $5.00`, 10, y);
+      y += 7;
+      doc.text(`Total: $${total.toFixed(2)}`, 10, y);
+      doc.save(`CapturedByDaniel_Order_${Date.now()}.pdf`);
+    };
+  </script>
+</body>
+</html>

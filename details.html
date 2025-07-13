@@ -1,0 +1,268 @@
+<!-- ✅ Updated details.html with single size (16x24) and no dropdown -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Print Details | Captured by Daniel</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+    }
+    .details-section {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .details-image {
+      width: 100%;
+      max-width: 700px;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+    .details-info {
+      background-color: #1a1a1a;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 700px;
+      width: 100%;
+    }
+    .print-options {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .print-option {
+      background-color: #2c2c2c;
+      padding: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .print-option:hover,
+    .print-option.selected {
+      border: 2px solid #2ecc71;
+    }
+    .quantity-field {
+      margin: 1rem 0;
+    }
+    .add-to-cart-button {
+      background-color: #2ecc71;
+      padding: 0.8rem 2rem;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .live-price {
+      font-weight: bold;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      color: #2ecc71;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+  <div class="logo">Captured by Daniel</div>
+
+  <div class="nav-toggle" id="navToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="cart.html" id="cart-link">Cart (0)</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+  <script>
+    document.getElementById("navToggle").addEventListener("click", function() {
+      document.getElementById("navLinks").classList.toggle("show");
+    });
+  </script>
+</header>
+
+<main class="details-section">
+  <img id="photo" class="details-image" src="" alt="Selected Photo">
+  <div class="details-info">
+    <h2 id="photo-title">Loading...</h2>
+    <p id="photo-location" style="color: #ccc;">📍 Location loading...</p>
+
+    <div class="print-options">
+      <div class="print-option" onclick="selectPrintType(this, 'Standard', 65)">
+        <h3>Standard Print (16x24)</h3>
+        <p>Matte finish — $65</p>
+      </div>
+      <div class="print-option" onclick="selectPrintType(this, 'Metal', 155)">
+        <h3>Metal Print (16x24)</h3>
+        <p>Aluminum shine — $155</p>
+      </div>
+    </div>
+
+    <div class="quantity-field">
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" min="1" value="1">
+    </div>
+
+    <div id="live-price" class="live-price"></div>
+
+    <button class="add-to-cart-button" onclick="addToCart()">Add to Cart</button>
+  </div>
+</main>
+
+<footer class="footer">
+  <p>Made with love by Gabi • A gift for Daniel and the world 🌿</p>
+</footer>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const photoId = params.get("photo");
+
+  const photoData = {
+    "baby_bear": {
+      title: "Baby Bear",
+      src: "assets/images/baby_bear.jpg",
+      location: "Coming Soon"
+    },
+    "bear_and_cubs": {
+      title: "Bear and Cubs",
+      src: "assets/images/Bear_and_Cubs.jpg",
+      location: "Coming Soon"
+    },
+    "bear": {
+      title: "Bear",
+      src: "assets/images/bear.jpg",
+      location: "Coming Soon"
+    },
+    "bison": {
+      title: "Bison",
+      src: "assets/images/bison.jpg",
+      location: "Coming Soon"
+    },
+    "cat": {
+      title: "Snow Cat",
+      src: "assets/images/cat.jpg",
+      location: "Coming Soon"
+    },
+    "eagle": {
+      title: "Eagle",
+      src: "assets/images/eagle.jpg",
+      location: "Coming Soon"
+    },
+    "fox": {
+      title: "Fox",
+      src: "assets/images/fox.jpg",
+      location: "Coming Soon"
+    },
+    "snowyfox": {
+      title: "Fox in the Snow",
+      src: "assets/images/snowy_fox.jpg",
+      location: "Coming Soon"
+    },
+    "landscape": {
+      title: "Grand Teton",
+      src: "assets/images/landscape.jpg",
+      location: "Coming Soon"
+    },
+    "owl": {
+      title: "Owl",
+      src: "assets/images/owl.jpg",
+      location: "Coming Soon"
+    },
+    "snowy_ram": {
+      title: "Ram in the Snow",
+      src: "assets/images/snowy_ram.jpg",
+      location: "Coming Soon"
+    }
+  };
+
+  const data = photoData[photoId];
+
+  if (data) {
+    document.getElementById("photo").src = data.src;
+    document.getElementById("photo-title").textContent = data.title;
+    document.getElementById("photo-location").textContent = `📍 ${data.location}`;
+  }
+
+  let selectedType = "";
+  let price = 0;
+
+  function selectPrintType(element, type, basePrice) {
+    document.querySelectorAll(".print-option").forEach(el => el.classList.remove("selected"));
+    element.classList.add("selected");
+    selectedType = type;
+    price = basePrice;
+    updatePrice();
+  }
+
+  function updatePrice() {
+    const quantity = parseInt(document.getElementById("quantity").value);
+    const livePrice = document.getElementById("live-price");
+    if (selectedType && !isNaN(quantity)) {
+      const total = price * quantity;
+      livePrice.textContent = `Price: $${total.toFixed(2)}`;
+    } else {
+      livePrice.textContent = "";
+    }
+  }
+
+  document.getElementById("quantity").addEventListener("input", updatePrice);
+
+  function addToCart() {
+    const quantity = parseInt(document.getElementById("quantity").value);
+    if (!selectedType || !data || isNaN(quantity) || quantity <= 0) {
+      alert("Please select a print type and quantity.");
+      return;
+    }
+
+    const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+    // Check for existing entry
+    const existingIndex = cartItems.findIndex(item =>
+      item.title === data.title && item.type === `${selectedType} (16x24)`
+    );
+
+    if (existingIndex > -1) {
+      // Update quantity if already in cart
+      cartItems[existingIndex].quantity += quantity;
+    } else {
+      cartItems.push({
+        title: data.title,
+        image: data.src,
+        type: `${selectedType} (16x24)`,
+        quantity,
+        unitPrice: price
+      });
+    }
+
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+    const cartLink = document.getElementById("cart-link");
+    const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    cartLink.textContent = `Cart (${totalCount})`;
+
+    alert(`✅ Added ${quantity} × ${selectedType} of '${data.title}' to cart.`);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const cartLink = document.getElementById("cart-link");
+    const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const count = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    cartLink.textContent = `Cart (${count})`;
+  });
+</script>
+</body>
+</html>

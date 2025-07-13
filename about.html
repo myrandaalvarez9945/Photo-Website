@@ -1,0 +1,125 @@
+<!-- ✨ Captured by Daniel – Updated about.html ✨ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About | Captured by Daniel</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body {
+      background-color: #111;
+      color: #eee;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    .about-section {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: #1a1a1a;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 255, 150, 0.05);
+    }
+
+    .about-title {
+      text-align: center;
+      font-size: 2.4rem;
+      color: #fff; /* ✅ Changed from green to white */
+      margin-bottom: 2rem;
+    }
+
+    .about-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .about-photo {
+      width: 100%;
+      max-width: 900px;
+      height: 500px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .about-text {
+      text-align: center;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto;
+      color: #ccc;
+    }
+
+    .about-text p {
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .about-content {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+  <div class="logo">Captured by Daniel</div>
+
+  <div class="nav-toggle" id="navToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="cart.html" id="cart-link">Cart (0)</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+</nav>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggle = document.getElementById("navToggle");
+        const navLinks = document.getElementById("navLinks");
+
+        toggle.addEventListener("click", () => {
+          navLinks.classList.toggle("show");
+        });
+      });
+    </script>
+  </header>
+
+  <main class="about-section">
+    <h2 class="about-title">Meet Daniel</h2>
+    <div class="about-content">
+      <img src="assets/images/family.jpeg" alt="Daniel the Photographer" class="about-photo" />
+      <div class="about-text">
+        <p>
+          Daniel grew up in Colorado Springs, Colorado. He went to college at the University of Wyoming, where he earned a degree in Wildlife Biology and Fisheries Management while also being in the AROTC program.
+        </p>
+        <p>
+          He began guiding in the Greater Yellowstone Ecosystem in 2015 while also serving in the Wyoming and Idaho National Guards as a Field Artillery Officer.
+        </p>
+        <p>
+          Daniel also has experience guiding tours in Alaska and Africa. His passion for sharing his knowledge of wildlife and photography has made guiding in the Greater Yellowstone Ecosystem a dream job.
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>Made with love by Gabi • A gift for Daniel and the world 🌿</p>
+  </footer>
+
+  <script src="js/cart.js"></script>
+</body>
+</html>

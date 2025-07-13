@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Step 3: Make Your Payment</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fafafa;
+      margin: 0;
+      padding: 0;
+      color: #000;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem;
+      flex-wrap: wrap;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .payment-info {
+      flex: 1 1 500px;
+      max-width: 600px;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .payment-info img {
+      max-width: 200px;
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+      border-radius: 8px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin: 1rem 0;
+    }
+
+    .cash-handle {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #000;
+      text-align: center;
+      margin: 1rem 0;
+    }
+
+    .notice,
+    .print-size,
+    .shipping-fee {
+      font-size: 1rem;
+      text-align: center;
+      color: #444;
+      margin-bottom: 1rem;
+    }
+
+    .place-order-button {
+      display: block;
+      margin: 2rem auto 0;
+      background-color: #28a745;
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .place-order-button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <h1>Step 3: Make Your Payment</h1>
+  <div class="container">
+    <div class="payment-info">
+      <p class="notice">Scan the QR code below using your Cash App and send your full total to:</p>
+      <p class="cash-handle">$GabriellaLozano</p>
+
+      <p class="shipping-fee">💵 Please include a $5 shipping fee in your total.</p>
+
+      <img src="assets/qr/cashapp_qr.png" alt="CashApp QR Code">
+
+      <p class="print-size">🖼️ All prints are 16x24 in size.</p>
+
+      <button class="place-order-button" onclick="placeOrder()">Place Order</button>
+    </div>
+  </div>
+
+  <script>
+    function placeOrder() {
+      // Skipping screenshot check
+      window.location.href = "summary.html";
+    }
+  </script>
+</body>
+</html>

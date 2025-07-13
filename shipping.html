@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shipping Info | Captured by Daniel</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <style>
+    body {
+      background-color: #111;
+      font-family: Arial, sans-serif;
+      color: #222;
+    }
+
+    nav {
+      background-color: #fff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    nav h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .form-container {
+      max-width: 700px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background-color: #ffffff;
+      color: #000;
+      border-radius: 10px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #000;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      color: #000;
+      background-color: #fff;
+    }
+
+    .btn-continue {
+      margin-top: 2rem;
+      padding: 0.8rem 1.5rem;
+      background-color: #0275d8;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      float: right;
+    }
+
+    .btn-continue:hover {
+      background-color: #025bb5;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+      margin-top: 0.3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <h2>Captured by Daniel</h2>
+  </nav>
+
+  <!-- Form Section -->
+  <div class="form-container">
+    <h1>Shipping Information</h1>
+    <form id="shippingForm">
+      <label for="firstName">First Name*</label>
+      <input type="text" id="firstName" required />
+
+      <label for="lastName">Last Name*</label>
+      <input type="text" id="lastName" required />
+
+      <label for="phone">Phone Number*</label>
+      <input type="tel" id="phone" required placeholder="(123) 456-7890" maxlength="14" />
+      <div id="phoneError" class="error-message" style="display: none;">Enter a valid 10-digit phone number.</div>
+
+      <label for="email">Email Address*</label>
+      <input type="email" id="email" required />
+
+      <label for="address">Shipping Address*</label>
+      <textarea id="address" rows="3" required></textarea>
+
+      <label for="cashApp">Cash App Handle / Username*</label>
+      <input type="text" id="cashApp" placeholder="e.g. $SupportArtWithDaniel" required />
+
+      <button type="submit" class="btn-continue">Continue</button>
+    </form>
+  </div>
+
+  <script>
+    const phoneInput = document.getElementById("phone");
+    const phoneError = document.getElementById("phoneError");
+
+    // Auto-format phone number as (XXX) XXX-XXXX
+    phoneInput.addEventListener("input", (e) => {
+      let numbers = e.target.value.replace(/\D/g, "").substring(0, 10);
+      let formatted = numbers;
+
+      if (numbers.length > 6) {
+        formatted = `(${numbers.slice(0,3)}) ${numbers.slice(3,6)}-${numbers.slice(6,10)}`;
+      } else if (numbers.length > 3) {
+        formatted = `(${numbers.slice(0,3)}) ${numbers.slice(3)}`;
+      } else if (numbers.length > 0) {
+        formatted = `(${numbers}`;
+      }
+
+      phoneInput.value = formatted;
+    });
+
+    const shippingForm = document.getElementById("shippingForm");
+
+    shippingForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const rawPhone = phoneInput.value.replace(/\D/g, "");
+      if (rawPhone.length !== 10) {
+        phoneError.style.display = "block";
+        return;
+      } else {
+        phoneError.style.display = "none";
+      }
+
+      const shippingData = {
+        firstName: document.getElementById("firstName").value.trim(),
+        lastName: document.getElementById("lastName").value.trim(),
+        phone: rawPhone,
+        email: document.getElementById("email").value.trim(),
+        address: document.getElementById("address").value.trim(),
+        cashApp: document.getElementById("cashApp").value.trim(),
+      };
+
+      if (Object.values(shippingData).some(val => val === "")) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      localStorage.setItem("shippingInfo", JSON.stringify(shippingData));
+      localStorage.setItem("checkoutStep", "shippingComplete");
+
+      window.location.href = "payment.html";
+    });
+  </script>
+</body>
+</html>
