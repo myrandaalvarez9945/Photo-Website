@@ -1,6 +1,6 @@
 # 📸 Captured by Daniel
 
-**Captured by Daniel** is a beautifully responsive e-commerce photography portfolio site, designed to showcase the powerful and poetic imagery of nature photographer Daniel. Built with care and clarity by Gabi, this site offers an elegant experience for desktop and mobile users alike.
+**Captured by Daniel** is a beautifully responsive e-commerce photography portfolio site, designed to showcase the powerful and poetic imagery of nature photographer Daniel. Built with care and clarity, this site offers an elegant experience for desktop and mobile users alike.
 
 > “Through the Lens, Nature Speaks” — A story told one wild moment at a time.
 
